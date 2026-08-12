@@ -13,11 +13,19 @@ connectDB();
 
 const app = express();
 
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://roll-call-lovat.vercel.app"
+];
+
 app.use(cors({
-    origin: [
-        "http://localhost:5173",
-        "https://rollcall-1ovat.vercel.app"
-    ],
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     credentials: true
 }));
 app.use(express.json());
